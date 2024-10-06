@@ -1,0 +1,73 @@
+/* EntryForm.css */
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f2f5;
+}
+
+.entry-form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.entry-form h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.entry-form input,
+.entry-form select,
+.entry-form button {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.entry-form input:focus,
+.entry-form select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.entry-form button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.entry-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Footer navigation styles */
+.footer-nav {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.footer-nav button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.footer-nav button:hover {
+  background-color: #0056b3;
+}
