@@ -79,6 +79,7 @@ const EntryForm = () => {
           required 
           maxLength="10" // Optional: You can limit the input length to 10
         />
+        <p></p>
         <select name="department" value={formData.department} onChange={handleChange}>
           <option value="">Select Department</option>
           <option value="AIML">AIML</option>
