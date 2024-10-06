@@ -1,0 +1,8 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "in.gururaja.bdc",
+      "sha256_cert_fingerprints": ["C2:54:8C:FA:DD:27:48:1C:84:7F:E2:EC:AA:11:EA:23:AE:55:62:4A:C8:DD:1B:03:78:85:98:D7:C0:02:D8:3A"]
+    }
+  }]
