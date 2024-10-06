@@ -9,7 +9,7 @@ const EntryForm = () => {
     department: '',
     age: '',
     register: '',
-    email: '',
+    // email: '',
     phone: '',
     blood: '',
     year: ''
@@ -101,7 +101,7 @@ const EntryForm = () => {
           <option value="4">4</option>
         </select>
         <input type="text" name="register" placeholder="Register No." value={formData.register} onChange={handleChange} />
-        <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
+        {/* <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} /> */}
         <button type="submit">Register</button>
       </form>
       <nav className="footer-nav">

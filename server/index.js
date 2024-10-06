@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 const path = require('path');
 require('dotenv').config();
 
@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema({
   dob: Date,
   age: Number,
   phone: String,
-  email: String,
+  // email: String,
   donated: Boolean
 });
 
@@ -78,34 +78,34 @@ app.post('/api/confirm-donation', async (req, res) => {
       user.donated = donated;
       await user.save();
       if (donated === true) {
-        if (user.email) {
-          const transporter = nodemailer.createTransport({
-            host: process.env.HOST,
-            port: 465,
-            secure: true,
-            auth: {
-              user: process.env.USER,
-              pass: process.env.PASSWORD
-            }
-          });
-          const mailOptions = {
-            from: process.env.USER,
-            to: user.email,
-            subject: 'Thank you for donating blood',
-            text: `Dear ${user.name}, thank you for donating blood.`
-          };
-          await transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-              console.log('Error sending email:', error);
-              return res.status(500).send('Error sending email');
-            }
-            console.log('Email sent:', info.response);
-            res.send('Donation confirmed and thank you email sent');
-          });
-          res.send('Donation confirmed and thank you email sent');
-        } else {
+        // if (user.email) {
+        //   const transporter = nodemailer.createTransport({
+        //     host: process.env.HOST,
+        //     port: 465,
+        //     secure: true,
+        //     auth: {
+        //       user: process.env.USER,
+        //       pass: process.env.PASSWORD
+        //     }
+        //   });
+        //   const mailOptions = {
+        //     from: process.env.USER,
+        //     to: user.email,
+        //     subject: 'Thank you for donating blood',
+        //     text: `Dear ${user.name}, thank you for donating blood.`
+        //   };
+        //   await transporter.sendMail(mailOptions, (error, info) => {
+        //     if (error) {
+        //       console.log('Error sending email:', error);
+        //       return res.status(500).send('Error sending email');
+        //     }
+        //     console.log('Email sent:', info.response);
+        //     res.send('Donation confirmed and thank you email sent');
+        //   });
+        //   res.send('Donation confirmed and thank you email sent');
+        // } else {
           res.send('Donation confirmed');
-        }
+        // }
       } else {
         res.send('Donation status updated');
       }
