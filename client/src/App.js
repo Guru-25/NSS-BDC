@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Import axios for making HTTP requests
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import EntryForm from './components/EntryForm';
@@ -8,11 +9,16 @@ import './App.css';
 const App = () => {
   const [authenticated, setAuthenticated] = useState(Cookies.get('authenticated') === 'true');
 
-  const handleLogin = (username, password) => {
-    if (username === process.env.REACT_APP_USERNAME && password === process.env.REACT_APP_PASSWORD) { // Replace with your own credentials
-      Cookies.set('authenticated', 'true', { expires: 1 }); // Expires in 1 day
-      setAuthenticated(true);
-    } else {
+  const handleLogin = async (username, password) => {
+    try {
+      // Make API call to the server for login validation
+      const response = await axios.post('/api/login', { username, password });
+      
+      if (response.status === 200) {
+        Cookies.set('authenticated', 'true', { expires: 1 }); // Set authenticated cookie
+        setAuthenticated(true);
+      }
+    } catch (error) {
       alert('Invalid credentials');
     }
   };

@@ -32,6 +32,18 @@ const UserSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', UserSchema);
 
+// login endpoint
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+
+  // In a real-world scenario, you would verify against a database
+  if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
+    res.status(200).json({ message: 'Login successful' });
+  } else {
+    res.status(401).json({ message: 'Invalid credentials' });
+  }
+});
+
 // API Routes
 app.post('/api/register', async (req, res) => {
   try {
