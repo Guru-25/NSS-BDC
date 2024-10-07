@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-// const nodemailer = require('nodemailer');
 const path = require('path');
 require('dotenv').config();
 const Excel = require('exceljs');
@@ -170,7 +169,6 @@ app.post('/api/confirm-donation', async (req, res) => {
       user.donated = donated;
       await user.save();
       if (donated === true) {
-        // Email sending logic (commented out in your original code)
         res.send('Donation confirmed');
       } else {
         res.send('Donation status updated');
