@@ -52,8 +52,7 @@ const Home = ({ onLogout }) => (
     <div className="home-buttons">
       <button onClick={() => window.location.href = '/entry'}>Entry</button>
       <button onClick={() => window.location.href = '/exit'}>Exit</button>
-      <button onClick={() => window.location.href = '/statistics'}>Stats</button>
-      <button onClick={() => window.open('https://charts.mongodb.com/charts-nss-sozoxrc/public/dashboards/7ae27512-8b16-4f3e-8ad9-731b647670d7', '_blank')}>Chart</button>
+      <button onClick={() => window.location.href = '/statistics'}>Statistics</button>
     </div>
   </div>
 );
