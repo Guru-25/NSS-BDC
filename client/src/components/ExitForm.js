@@ -3,32 +3,43 @@ import axios from 'axios';
 import './ExitForm.css'; // Import the CSS file
 
 const ExitForm = () => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [searchType, setSearchType] = useState('register'); // 'register' or 'phone'
+  const [searchValue, setSearchValue] = useState('');
   const [userDetails, setUserDetails] = useState(null);
   const [donated, setDonated] = useState(false);
   const [error, setError] = useState('');
 
-  // Handle input changes to allow only digits and limit to 10 characters
-  const handleChange = (e) => {
+  const handleSearchTypeChange = (e) => {
+    setSearchType(e.target.value);
+    setSearchValue(''); // Clear the search value when switching type
+    setError('');
+    setUserDetails(null);
+  };
+
+  const handleSearchValueChange = (e) => {
     let input = e.target.value;
-    const sanitizedInput = input.replace(/\D/g, ''); // Only allow digits
-    if (sanitizedInput.length <= 10) {
-      setPhoneNumber(sanitizedInput);
+    if (searchType === 'phone') {
+      const sanitizedInput = input.replace(/\D/g, ''); // Only allow digits for phone
+      if (sanitizedInput.length <= 10) {
+        setSearchValue(sanitizedInput);
+      }
+    } else {
+      setSearchValue(input); // Allow any input for register number
     }
   };
 
   const handleFetch = async (e) => {
     e.preventDefault();
-    console.log('Fetching user details for phone number:', phoneNumber);
+    console.log(`Fetching user details for ${searchType}:`, searchValue);
 
-    if (phoneNumber.length !== 10) {
+    if (searchType === 'phone' && searchValue.length !== 10) {
       setError('Phone number must contain exactly 10 digits');
       setUserDetails(null);
       return;
     }
 
     try {
-      const response = await axios.get(`/api/user/${phoneNumber}`);
+      const response = await axios.get(`/api/user/${searchType}/${searchValue}`);
       console.log('Response from server:', response);
       if (response.data) {
         setUserDetails(response.data);
@@ -46,20 +57,23 @@ const ExitForm = () => {
   };
 
   const handleConfirm = async () => {
-    console.log('Confirming donation for phone number:', phoneNumber, 'with donated status:', donated);
-
-    if (phoneNumber.length !== 10) {
+    console.log('Confirming donation for', searchType, ':', searchValue, 'with donated status:', donated);
+  
+    if (searchType === 'phone' && searchValue.length !== 10) {
       setError('Phone number must contain exactly 10 digits');
       return;
     }
-
+  
     try {
-      const response = await axios.post('/api/confirm-donation', { phoneNumber, donated });
+      const response = await axios.post('/api/confirm-donation', { 
+        [searchType]: searchValue, 
+        donated 
+      });
       console.log('Response from server:', response);
       alert('Donation changed to ' + (donated ? 'Yes' : 'No'));
-
+  
       // Clear form and states after confirmation
-      setPhoneNumber(''); // Clear phone number
+      setSearchValue(''); // Clear search value
       setUserDetails(null); // Clear user details
       setError(''); // Clear error messages
     } catch (error) {
@@ -72,11 +86,31 @@ const ExitForm = () => {
     <div className="form-container">
       <form onSubmit={handleFetch} className="exit-form">
         <h2>Fetch User Details</h2>
+        <div className="search-type-selector">
+          <label>
+            <input
+              type="radio"
+              value="register"
+              checked={searchType === 'register'}
+              onChange={handleSearchTypeChange}
+            />
+            Register Number &nbsp;
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="phone"
+              checked={searchType === 'phone'}
+              onChange={handleSearchTypeChange}
+            />
+            Phone Number
+          </label>
+        </div>
         <input
           type="text"
-          placeholder="Phone Number"
-          value={phoneNumber}
-          onChange={handleChange}
+          placeholder={searchType === 'register' ? "Register Number" : "Phone Number"}
+          value={searchValue}
+          onChange={handleSearchValueChange}
           required
         />
         <button type="submit">Fetch User</button>

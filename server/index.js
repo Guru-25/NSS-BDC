@@ -56,9 +56,20 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-app.get('/api/user/:phoneNumber', async (req, res) => {
+// Route to fetch user by phone number or register number
+app.get('/api/user/:type/:value', async (req, res) => {
   try {
-    const user = await User.findOne({ phone: req.params.phoneNumber });
+    const { type, value } = req.params;
+    let user;
+
+    if (type === 'phone') {
+      user = await User.findOne({ phone: value });
+    } else if (type === 'register') {
+      user = await User.findOne({ register: value });
+    } else {
+      return res.status(400).send('Invalid search type');
+    }
+
     if (user) {
       res.json(user);
     } else {
@@ -70,42 +81,26 @@ app.get('/api/user/:phoneNumber', async (req, res) => {
   }
 });
 
+// Route to confirm donation
 app.post('/api/confirm-donation', async (req, res) => {
   try {
-    const { phoneNumber, donated } = req.body;
-    const user = await User.findOne({ phone: phoneNumber });
+    const { phone, register, donated } = req.body;
+    let user;
+
+    if (phone) {
+      user = await User.findOne({ phone });
+    } else if (register) {
+      user = await User.findOne({ register });
+    } else {
+      return res.status(400).send('Either phone or register number is required');
+    }
+
     if (user) {
       user.donated = donated;
       await user.save();
       if (donated === true) {
-        // if (user.email) {
-        //   const transporter = nodemailer.createTransport({
-        //     host: process.env.HOST,
-        //     port: 465,
-        //     secure: true,
-        //     auth: {
-        //       user: process.env.USER,
-        //       pass: process.env.PASSWORD
-        //     }
-        //   });
-        //   const mailOptions = {
-        //     from: process.env.USER,
-        //     to: user.email,
-        //     subject: 'Thank you for donating blood',
-        //     text: `Dear ${user.name}, thank you for donating blood.`
-        //   };
-        //   await transporter.sendMail(mailOptions, (error, info) => {
-        //     if (error) {
-        //       console.log('Error sending email:', error);
-        //       return res.status(500).send('Error sending email');
-        //     }
-        //     console.log('Email sent:', info.response);
-        //     res.send('Donation confirmed and thank you email sent');
-        //   });
-        //   res.send('Donation confirmed and thank you email sent');
-        // } else {
-          res.send('Donation confirmed');
-        // }
+        // Email sending logic (commented out in your original code)
+        res.send('Donation confirmed');
       } else {
         res.send('Donation status updated');
       }
