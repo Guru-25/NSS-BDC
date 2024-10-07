@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 // const nodemailer = require('nodemailer');
 const path = require('path');
 require('dotenv').config();
+const Excel = require('exceljs');
+const moment = require('moment-timezone');
 
 const app = express();
 
@@ -26,8 +28,8 @@ const UserSchema = new mongoose.Schema({
   dob: Date,
   age: Number,
   phone: String,
-  // email: String,
-  donated: Boolean
+  donated: Boolean,
+  timestamp: { type: Date, default: Date.now }
 });
 
 const User = mongoose.model('User', UserSchema);
@@ -44,19 +46,88 @@ app.post('/api/login', (req, res) => {
   }
 });
 
-// API Routes
-app.post('/api/register', async (req, res) => {
+app.get('/api/statistics', async (req, res) => {
   try {
-    const user = new User(req.body);
-    await user.save();
-    res.status(201).send('User registered');
+    const totalUsers = await User.countDocuments();
+    const donatedUsers = await User.countDocuments({ donated: true });
+    
+    const totalMale = await User.countDocuments({ gender: 'Male' });
+    const totalFemale = await User.countDocuments({ gender: 'Female' });
+    
+    const donatedMale = await User.countDocuments({ donated: true, gender: 'Male' });
+    const donatedFemale = await User.countDocuments({ donated: true, gender: 'Female' });
+
+    res.json({
+      totalUsers,
+      donatedUsers,
+      totalMale,
+      totalFemale,
+      donatedMale,
+      donatedFemale
+    });
   } catch (error) {
-    console.error('Error registering user:', error);
-    res.status(500).send('Error registering user');
+    console.error('Error fetching statistics:', error);
+    res.status(500).send('Error fetching statistics');
   }
 });
 
-// Route to fetch user by phone number or register number
+app.get('/api/export-users', async (req, res) => {
+  try {
+    const users = await User.find({});
+
+    const workbook = new Excel.Workbook();
+    const worksheet = workbook.addWorksheet('Users');
+
+    // Add headers
+    worksheet.addRow(['Timestamp', 'Name', 'Gender', 'Age', 'Blood Group', 'Phone', 'Donated', 'Department', 'Year', 'Register Number']);
+
+    // Add data
+    users.forEach(user => {
+      const timestamp = user.timestamp 
+        ? moment(user.timestamp).tz('Asia/Kolkata').format('D/M/YYYY HH:mm:ss')
+        : '';
+      worksheet.addRow([
+        timestamp,
+        user.name,
+        user.gender,
+        user.age,
+        user.blood,
+        user.phone,
+        user.donated ? 'Yes' : 'No',
+        user.department,
+        user.year,
+        user.register,
+      ]);
+    });
+
+    // Set response headers
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=users.xlsx');
+
+    // Write to response
+    await workbook.xlsx.write(res);
+    res.end();
+
+  } catch (error) {
+    console.error('Error exporting donors:', error);
+    res.status(500).send('Error exporting donors');
+  }
+});
+
+// API Routes
+app.post('/api/register', async (req, res) => {
+  try {
+    const userData = { ...req.body, timestamp: new Date() };
+    const user = new User(userData);
+    await user.save();
+    res.status(201).send('Donor registered');
+  } catch (error) {
+    console.error('Error registering donor:', error);
+    res.status(500).send('Error registering donor');
+  }
+});
+
+// Route to fetch donor by phone number or register number
 app.get('/api/user/:type/:value', async (req, res) => {
   try {
     const { type, value } = req.params;
@@ -73,11 +144,11 @@ app.get('/api/user/:type/:value', async (req, res) => {
     if (user) {
       res.json(user);
     } else {
-      res.status(404).send('User not found');
+      res.status(404).send('Donor not found');
     }
   } catch (error) {
-    console.error('Error fetching user:', error);
-    res.status(500).send('Error fetching user');
+    console.error('Error fetching donor:', error);
+    res.status(500).send('Error fetching donor');
   }
 });
 
@@ -105,7 +176,7 @@ app.post('/api/confirm-donation', async (req, res) => {
         res.send('Donation status updated');
       }
     } else {
-      res.status(404).send('User not found');
+      res.status(404).send('Donor not found');
     }
   } catch (error) {
     console.error('Error confirming donation:', error);

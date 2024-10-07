@@ -30,7 +30,7 @@ const ExitForm = () => {
 
   const handleFetch = async (e) => {
     e.preventDefault();
-    console.log(`Fetching user details for ${searchType}:`, searchValue);
+    console.log(`Fetching donor details for ${searchType}:`, searchValue);
 
     if (searchType === 'phone' && searchValue.length !== 10) {
       setError('Phone number must contain exactly 10 digits');
@@ -47,12 +47,12 @@ const ExitForm = () => {
         setError(`Fetched at ${new Date().toLocaleTimeString()}`);
       } else {
         setUserDetails(null);
-        setError('No user found');
+        setError('No donor found');
       }
     } catch (error) {
-      console.error('Error fetching user details:', error);
+      console.error('Error fetching donor details:', error);
       setUserDetails(null);
-      setError('No user found');
+      setError('No donor found');
     }
   };
 
@@ -74,7 +74,7 @@ const ExitForm = () => {
   
       // Clear form and states after confirmation
       setSearchValue(''); // Clear search value
-      setUserDetails(null); // Clear user details
+      setUserDetails(null); // Clear donor details
       setError(''); // Clear error messages
     } catch (error) {
       console.error('Error confirming donation:', error);
@@ -85,7 +85,7 @@ const ExitForm = () => {
   return (
     <div className="form-container">
       <form onSubmit={handleFetch} className="exit-form">
-        <h2>Fetch User Details</h2>
+        <h2>Fetch Donor Details</h2>
         <div className="search-type-selector">
           <label>
             <input
@@ -113,7 +113,7 @@ const ExitForm = () => {
           onChange={handleSearchValueChange}
           required
         />
-        <button type="submit">Fetch User</button>
+        <button type="submit">Fetch Donor</button>
       </form>
       {error && <p className="error">{error}</p>}
       {userDetails && (
@@ -132,9 +132,7 @@ const ExitForm = () => {
         </div>
       )}
       <nav className="footer-nav">
-        <button onClick={() => window.location.href = '/'}>Home</button>&nbsp;
-        <button onClick={() => window.location.href = '/entry'}>Entry</button>&nbsp;
-        <button onClick={() => window.open('https://charts.mongodb.com/charts-nss-sozoxrc/public/dashboards/7ae27512-8b16-4f3e-8ad9-731b647670d7', '_blank')}>Chart</button>
+        <button onClick={() => window.location.href = '/'}>Home</button>
       </nav>
     </div>
   );

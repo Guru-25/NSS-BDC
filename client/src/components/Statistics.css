@@ -1,0 +1,62 @@
+.statistics {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center; /* Center the text */
+}
+
+.statistics:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.statistics h2 {
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.stat-grid {
+  display: flex;
+  flex-direction: column; /* Stacks sections in a column */
+  align-items: center; /* Centers the sections horizontally */
+}
+
+.stat-section {
+  width: 80%; /* Controls the width of each section */
+  margin-bottom: 25px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.stat-section h3 {
+  color: #007bff;
+  margin-bottom: 15px;
+  font-size: 1.5em;
+}
+
+.stat-item {
+  font-size: 1.1em;
+  color: #555;
+  margin: 10px 0;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin-top: 20px;
+}

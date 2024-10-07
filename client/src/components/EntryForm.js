@@ -40,18 +40,18 @@ const EntryForm = () => {
     
     try {
       const response = await axios.post('/api/register', { ...formData, phone: trimmedPhone });
-      console.log('User details submitted:', response.data);
-      alert('User registered');
+      console.log('Donor details submitted:', response.data);
+      alert('Donor registered');
       setFormData(initialFormData); // Reset the form after successful submission
     } catch (error) {
-      console.error('Error submitting user details:', error);
+      console.error('Error submitting donor details:', error);
     }
   };
 
   return (
     <div className="form-container">
       <form onSubmit={handleSubmit} className="entry-form">
-        <h2>Register User</h2>
+        <h2>Register Donor</h2>
         <input type="text" name="name" placeholder="Name *" value={formData.name} onChange={handleChange} required />
         <select name="gender" value={formData.gender} onChange={handleChange} required>
           <option value="">Select Gender *</option>
@@ -82,8 +82,9 @@ const EntryForm = () => {
         <p></p>
         <select name="department" value={formData.department} onChange={handleChange}>
           <option value="">Select Department</option>
-          <option value="AIML">AIML</option>
-          <option value="AMCS">AMCS</option>
+          <option value="AMCS">AMCS (DS)</option>
+          <option value="ARCH">ARCH</option>
+          <option value="CA">CA</option>
           <option value="Civil">Civil</option>
           <option value="CSBS">CSBS</option>
           <option value="CSE">CSE</option>
@@ -92,6 +93,7 @@ const EntryForm = () => {
           <option value="IT">IT</option>
           <option value="MECH">MECH</option>
           <option value="MECT">MECT</option>
+          <option value="Other">Other</option>
         </select>
         <select name="year" value={formData.year} onChange={handleChange}>
           <option value="">Select Year</option>
@@ -105,9 +107,7 @@ const EntryForm = () => {
         <button type="submit">Register</button>
       </form>
       <nav className="footer-nav">
-        <button onClick={() => window.location.href = '/'}>Home</button>&nbsp;
-        <button onClick={() => window.location.href = '/exit'}>Exit</button>&nbsp;
-        <button onClick={() => window.open('https://charts.mongodb.com/charts-nss-sozoxrc/public/dashboards/7ae27512-8b16-4f3e-8ad9-731b647670d7', '_blank')}>Chart</button>
+        <button onClick={() => window.location.href = '/'}>Home</button>
       </nav>
     </div>
   );

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Cookies from 'js-cookie';
 import EntryForm from './components/EntryForm';
 import ExitForm from './components/ExitForm';
+import Statistics from './components/Statistics';
 import './App.css';
 
 const App = () => {
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/" element={authenticated ? <Home onLogout={handleLogout} /> : <Login onLogin={handleLogin} />} />
           <Route path="/entry" element={authenticated ? <EntryForm /> : <Navigate to="/" replace />} />
           <Route path="/exit" element={authenticated ? <ExitForm /> : <Navigate to="/" replace />} />
+          <Route path="/statistics" element={authenticated ? <Statistics /> : <Navigate to="/" replace />} />
         </Routes>
       </div>
     </Router>
@@ -50,6 +52,7 @@ const Home = ({ onLogout }) => (
     <div className="home-buttons">
       <button onClick={() => window.location.href = '/entry'}>Entry</button>
       <button onClick={() => window.location.href = '/exit'}>Exit</button>
+      <button onClick={() => window.location.href = '/statistics'}>Stats</button>
       <button onClick={() => window.open('https://charts.mongodb.com/charts-nss-sozoxrc/public/dashboards/7ae27512-8b16-4f3e-8ad9-731b647670d7', '_blank')}>Chart</button>
     </div>
   </div>
